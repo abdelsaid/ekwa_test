@@ -1,0 +1,3 @@
+parameters:
+  web_service_promo_code_list: '%env(PROMO_CODE_LIST)%'
+  web_service_offer_list: '%env(OFFER_LIST)%'
