@@ -87,4 +87,9 @@ class OfferData
     {
         return $this->validPromoCodeList;
     }
+
+    public function toArray()
+    {
+        return get_object_vars($this);
+    }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Model;
 
 use DateTime;
-use Symfony\Component\Validator\Constraints as Assert;
 
 class PromoCodeData
 {

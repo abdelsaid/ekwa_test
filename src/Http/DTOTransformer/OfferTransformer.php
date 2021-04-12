@@ -3,7 +3,6 @@
 namespace App\Http\DTOTransformer;
 
 use App\Http\Model\OfferData;
-use App\Http\Model\PromoCodeData;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 

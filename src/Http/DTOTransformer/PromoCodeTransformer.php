@@ -4,11 +4,10 @@ namespace App\Http\DTOTransformer;
 
 use App\Http\Model\PromoCodeData;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 
 class PromoCodeTransformer
 {
-    public function arrayToObject(?array $data): Collection
+    public function arrayToObject(?array $data): ArrayCollection
     {
         $collection = new ArrayCollection();
         foreach ($data as $datum) {

@@ -3,9 +3,9 @@
 namespace App\Manager;
 
 use App\Http\DTOTransformer\OfferTransformer;
-use App\Http\DTOTransformer\PromoCodeTransformer;
 use App\Http\Model\OfferData;
 use App\Http\WSCalls\OfferList;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 class OfferManager
@@ -33,7 +33,7 @@ class OfferManager
         $this->transformer = $transformer;
     }
 
-    public function getValidOffers(?string $promoCode): array
+    public function getValidOffers(?string $promoCode): ArrayCollection
     {
         $offersAsArray = $this->offerList->fetchAllOffers();
 
@@ -42,13 +42,13 @@ class OfferManager
         return $this->getValidOffersForPromoCode($promoCode, $offersCollection);
     }
 
-    private function getValidOffersForPromoCode(?string $promoCode, Collection $offers): array
+    private function getValidOffersForPromoCode(?string $promoCode, Collection $offers): ArrayCollection
     {
-        $result = [];
+        $result = new ArrayCollection();
         /** @var null|OfferData $offer */
         foreach ($offers as $offer) {
             if (in_array($promoCode, $offer->getValidPromoCodeList())) {
-                array_push($result, $offer);
+                $result->add($offer);
             }
         }
 

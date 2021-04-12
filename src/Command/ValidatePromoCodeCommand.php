@@ -4,10 +4,10 @@ namespace App\Command;
 
 use App\Manager\OfferManager;
 use App\Manager\PromoCodeManager;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -54,12 +54,40 @@ class ValidatePromoCodeCommand extends Command
         }
 
         $isValidPromoCode = $this->promoCodeManager->validatePromoCode($promoCode);
+        if (!$isValidPromoCode) {
+            $io->error(sprintf(
+                    'There promo code %s is not valid',
+                    $promoCode)
+            );
+
+            return Command::SUCCESS;
+        }
 
         $validOffers = $this->offerManager->getValidOffers($promoCode);
-        if (count($validOffers) > 0) {
-            $io->success(sprintf('There is %d offer(s) found with the \'%s\' promo code', count($validOffers), $promoCode));
+        if ($validOffers->count() > 0) {
+            $io->success(sprintf(
+                'There is %d offer(s) found with the \'%s\' promo code',
+                    $validOffers->count(),
+                $promoCode)
+            );
+
+            $this->writeDataInFile($validOffers);
+
         }
-        dd($validOffers);
+
         return Command::SUCCESS;
+    }
+
+    private function writeDataInFile(ArrayCollection $validOffers)
+    {
+        $file = __DIR__ . '/../../var/log/validOffers.txt';
+
+        $fileFp = fopen($file, 'a');
+        foreach ($validOffers as $validOffer) {
+            fwrite($fileFp, serialize($validOffer->toArray()) . PHP_EOL);
+
+        }
+
+        fclose($fileFp);
     }
 }
